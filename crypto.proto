@@ -1,0 +1,26 @@
+// TODO(Someone): copyright
+
+syntax = "proto3";
+
+package crypto;
+
+message PublicKey256 {
+  bytes data = 1;
+}
+
+message KeyPair256 {
+  bytes priv_key = 1;
+  PublicKey256 public_key = 2;
+}
+
+message Signature256 {
+  bytes data = 1;
+}
+
+message Digest256 {
+  bytes data = 1;
+}
+
+message Digests256 {
+  repeated Digest256 digests = 1;
+}
