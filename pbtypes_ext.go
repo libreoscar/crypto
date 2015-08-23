@@ -131,3 +131,14 @@ func TextToDigest(text string) (digest *Digest256, err error) {
 	}
 	return
 }
+
+func NewDigest(bytes []byte) (digest *Digest256, err error) {
+	cp := make([]byte, len(bytes))
+	copy(cp, bytes)
+	digest = &Digest256{cp}
+	if !digest.IsValid() {
+		err = fmt.Errorf("Invalid digest: %v", bytes)
+		digest = nil
+	}
+	return
+}
