@@ -118,7 +118,7 @@ func (digest *Digest256) IsValid() bool {
 	return len(digest.Data) == 256/8
 }
 
-func TextToDigest(text string) (digest *Digest256, err error) {
+func TextToDigest256(text string) (digest *Digest256, err error) {
 	bytes, err := hex.DecodeString(text)
 	if err != nil {
 		return
@@ -132,7 +132,7 @@ func TextToDigest(text string) (digest *Digest256, err error) {
 	return
 }
 
-func NewDigest(bytes []byte) (digest *Digest256, err error) {
+func NewDigest256(bytes []byte) (digest *Digest256, err error) {
 	cp := make([]byte, len(bytes))
 	copy(cp, bytes)
 	digest = &Digest256{cp}
