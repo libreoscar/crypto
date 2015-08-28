@@ -4,19 +4,23 @@ syntax = "proto3";
 
 package crypto;
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 message PublicKey256 {
   bytes data = 1;
 }
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 message KeyPair256 {
   bytes priv_key = 1;
   PublicKey256 public_key = 2;
 }
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 message Signature256 {
   bytes data = 1;
 }
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 message Digest256 {
   bytes data = 1;
 }

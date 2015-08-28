@@ -1,5 +1,4 @@
-// TODO: copyright
-// Delete this file if we implement a Digest() function for all necessary types
+//go:generate protoc -I $GOPATH/src --go_out=$GOPATH/src $GOPATH/src/github.com/libreoscar/crypto/crypto.proto
 
 package crypto
 
@@ -110,7 +109,7 @@ func (digest *Digest256) ToText() string {
 	return hex.EncodeToString(digest.Data)
 }
 
-func (digest *Digest256) Brief() string {
+func (digest *Digest256) DebugString() string {
 	return hex.EncodeToString(digest.Data[:2])
 }
 

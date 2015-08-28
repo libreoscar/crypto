@@ -22,6 +22,7 @@ import proto "github.com/golang/protobuf/proto"
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 type PublicKey256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
@@ -30,6 +31,7 @@ func (m *PublicKey256) Reset()         { *m = PublicKey256{} }
 func (m *PublicKey256) String() string { return proto.CompactTextString(m) }
 func (*PublicKey256) ProtoMessage()    {}
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 type KeyPair256 struct {
 	PrivKey   []byte        `protobuf:"bytes,1,opt,name=priv_key,proto3" json:"priv_key,omitempty"`
 	PublicKey *PublicKey256 `protobuf:"bytes,2,opt,name=public_key" json:"public_key,omitempty"`
@@ -46,6 +48,7 @@ func (m *KeyPair256) GetPublicKey() *PublicKey256 {
 	return nil
 }
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 type Signature256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
@@ -54,6 +57,7 @@ func (m *Signature256) Reset()         { *m = Signature256{} }
 func (m *Signature256) String() string { return proto.CompactTextString(m) }
 func (*Signature256) ProtoMessage()    {}
 
+// DO NOT modify its field directly, object of this class is treated as immutable
 type Digest256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
