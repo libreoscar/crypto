@@ -23,6 +23,10 @@ func (pubkey *PublicKey256) IsValid() bool {
 	return VerifyPublicKey(pubkey)
 }
 
+func (pubkey *PublicKey256) DebugString() string {
+	return pubkey.ToText()
+}
+
 func TextToPublicKey(text string) (pubkey *PublicKey256, err error) {
 	bytes, err := hex.DecodeString(text)
 	if err != nil {
@@ -67,18 +71,24 @@ func TextToKeyPair(text string) (*KeyPair256, error) {
 	}
 }
 
+func (keypair *KeyPair256) DebugString() string {
+	return fmt.Sprintf("Private Key: %s\nPublic Key: %s",
+		hex.EncodeToString(keypair.PrivKey),
+		keypair.PublicKey.DebugString())
+}
+
 //--------------------------- Signature256 --------------------------------------------------------
 
-func (signature *Signature256) AsMapKey() string {
-	return string(signature.Data)
+func (s *Signature256) AsMapKey() string {
+	return string(s.Data)
 }
 
-func (signature *Signature256) ToText() string {
-	return hex.EncodeToString(signature.Data)
+func (s *Signature256) ToText() string {
+	return hex.EncodeToString(s.Data)
 }
 
-func (signature *Signature256) IsValid() bool {
-	return len(signature.Data) == 256/8*2
+func (s *Signature256) IsValid() bool {
+	return len(s.Data) == 256/8*2
 }
 
 func TextToSignature(text string) (sig *Signature256, err error) {
@@ -89,10 +99,14 @@ func TextToSignature(text string) (sig *Signature256, err error) {
 
 	sig = &Signature256{bytes}
 	if !sig.IsValid() {
-		err = fmt.Errorf("Invalid signature: %v", text)
+		err = fmt.Errorf("Invalid s: %v", text)
 		sig = nil
 	}
 	return
+}
+
+func (s *Signature256) DebugString() string {
+	return hex.EncodeToString(s.Data)
 }
 
 //--------------------------- Digest256 --------------------------------------------------------
@@ -107,10 +121,6 @@ func (digest *Digest256) AsMapKey() string {
 
 func (digest *Digest256) ToText() string {
 	return hex.EncodeToString(digest.Data)
-}
-
-func (digest *Digest256) DebugString() string {
-	return hex.EncodeToString(digest.Data[:2])
 }
 
 func (digest *Digest256) IsValid() bool {
@@ -140,4 +150,8 @@ func NewDigest256(bytes []byte) (digest *Digest256, err error) {
 		digest = nil
 	}
 	return
+}
+
+func (digest *Digest256) DebugString() string {
+	return hex.EncodeToString(digest.Data[:2])
 }
