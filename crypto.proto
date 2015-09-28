@@ -4,20 +4,26 @@ syntax = "proto3";
 
 package crypto;
 
+enum Type {
+	UNKNOWN = 0;
+	P256 = 1;
+}
+
 // DO NOT modify its field directly, object of this class is treated as immutable
 message PublicKey256 {
-  bytes data = 1;
+  bytes data = 1;  // 256 bits long
 }
 
 // DO NOT modify its field directly, object of this class is treated as immutable
-message KeyPair256 {
-  bytes priv_key = 1;
-  PublicKey256 public_key = 2;
+message PrivateKey {
+  Type type = 1;
+  bytes data = 2;  // for ecdsa, this is the random number k
 }
 
 // DO NOT modify its field directly, object of this class is treated as immutable
-message Signature256 {
-  bytes data = 1;
+message Signature {
+  Type type = 1;
+  bytes data = 2;  // for ecdsa, this is <r, s, x, y> (for now). TODO: use a more compact form?
 }
 
 // DO NOT modify its field directly, object of this class is treated as immutable

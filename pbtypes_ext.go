@@ -4,9 +4,10 @@ package crypto
 
 import (
 	"bytes"
+	"crypto/ecdsa"
+	"crypto/rand"
 	"encoding/hex"
 	"fmt"
-	"github.com/golang/protobuf/proto"
 )
 
 //--------------------------- PublicKey256 --------------------------------------------------------
@@ -19,94 +20,43 @@ func (pubkey *PublicKey256) ToText() string {
 	return hex.EncodeToString(pubkey.Data)
 }
 
-func (pubkey *PublicKey256) IsValid() bool {
-	return VerifyPublicKey(pubkey)
-}
-
 func (pubkey *PublicKey256) DebugString() string {
 	return pubkey.ToText()
 }
 
-func TextToPublicKey(text string) (pubkey *PublicKey256, err error) {
-	bytes, err := hex.DecodeString(text)
-	if err != nil {
-		return
-	}
+//--------------------------- PrivateKey ----------------------------------------------------------
 
-	pubkey = &PublicKey256{bytes}
-	if !pubkey.IsValid() {
-		err = fmt.Errorf("Invalid public key: %v", text)
-		pubkey = nil
-	}
-	return
-}
-
-//--------------------------- KeyPair256 ----------------------------------------------------------
-
-func (keypair *KeyPair256) ToText() string {
-	bytes, err := proto.Marshal(keypair)
-	if err != nil {
-		panic(err) // pb type should be able to be marshaled
-	}
-	return hex.EncodeToString(bytes)
-}
-
-// The returned keypair is not validated, because it won't be transfered to others
-func TextToKeyPair(text string) (*KeyPair256, error) {
-	var (
-		err     error
-		keypair = new(KeyPair256)
-	)
-
-	bytes, err := hex.DecodeString(text)
-	if err != nil {
-		return nil, err
-	}
-
-	err = proto.Unmarshal(bytes, keypair)
-	if err != nil {
-		return nil, err
+func (key *PrivateKey) GetPublicKey() *PublicKey256 {
+	if key.Type == Type_P256 {
+		ecPriv := p256NewEcPrivKey(key.Data)
+		return p256ToPubKey256(ecPriv.X, ecPriv.Y)
 	} else {
-		return keypair, nil
+		panic(fmt.Errorf("Unsupported type: %s", key.Type))
 	}
 }
 
-func (keypair *KeyPair256) DebugString() string {
-	return fmt.Sprintf("Private Key: %s\nPublic Key: %s",
-		hex.EncodeToString(keypair.PrivKey),
-		keypair.PublicKey.DebugString())
+func (key *PrivateKey) Sign(digest *Digest256) (*Signature, error) {
+	if key.Type == Type_P256 {
+		ecPriv := p256NewEcPrivKey(key.Data)
+		r, s, err := ecdsa.Sign(rand.Reader, ecPriv, digest.Data)
+		if err == nil {
+			return p256ToSignature(ecPriv.X, ecPriv.Y, r, s), nil
+		} else {
+			return nil, err
+		}
+	} else {
+		return nil, fmt.Errorf("Unsupported type: %s", key.Type)
+	}
+}
+
+func (key *PrivateKey) DebugString() string {
+	return fmt.Sprintf("Type: %s, Data: %s", key.Type, hex.EncodeToString(key.Data[:8]))
 }
 
 //--------------------------- Signature256 --------------------------------------------------------
 
-func (s *Signature256) AsMapKey() string {
-	return string(s.Data)
-}
-
-func (s *Signature256) ToText() string {
-	return hex.EncodeToString(s.Data)
-}
-
-func (s *Signature256) IsValid() bool {
-	return len(s.Data) == 256/8*2
-}
-
-func TextToSignature(text string) (sig *Signature256, err error) {
-	bytes, err := hex.DecodeString(text)
-	if err != nil {
-		return
-	}
-
-	sig = &Signature256{bytes}
-	if !sig.IsValid() {
-		err = fmt.Errorf("Invalid s: %v", text)
-		sig = nil
-	}
-	return
-}
-
-func (s *Signature256) DebugString() string {
-	return hex.EncodeToString(s.Data)
+func (s *Signature) DebugString() string {
+	return fmt.Sprintf("Type: %s, Data: %s", s.Type, hex.EncodeToString(s.Data[:8]))
 }
 
 //--------------------------- Digest256 --------------------------------------------------------

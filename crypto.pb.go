@@ -10,8 +10,8 @@ It is generated from these files:
 
 It has these top-level messages:
 	PublicKey256
-	KeyPair256
-	Signature256
+	PrivateKey
+	Signature
 	Digest256
 	Digests256
 */
@@ -21,6 +21,26 @@ import proto "github.com/golang/protobuf/proto"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+
+type Type int32
+
+const (
+	Type_UNKNOWN Type = 0
+	Type_P256    Type = 1
+)
+
+var Type_name = map[int32]string{
+	0: "UNKNOWN",
+	1: "P256",
+}
+var Type_value = map[string]int32{
+	"UNKNOWN": 0,
+	"P256":    1,
+}
+
+func (x Type) String() string {
+	return proto.EnumName(Type_name, int32(x))
+}
 
 // DO NOT modify its field directly, object of this class is treated as immutable
 type PublicKey256 struct {
@@ -32,30 +52,24 @@ func (m *PublicKey256) String() string { return proto.CompactTextString(m) }
 func (*PublicKey256) ProtoMessage()    {}
 
 // DO NOT modify its field directly, object of this class is treated as immutable
-type KeyPair256 struct {
-	PrivKey   []byte        `protobuf:"bytes,1,opt,name=priv_key,proto3" json:"priv_key,omitempty"`
-	PublicKey *PublicKey256 `protobuf:"bytes,2,opt,name=public_key" json:"public_key,omitempty"`
+type PrivateKey struct {
+	Type Type   `protobuf:"varint,1,opt,name=type,enum=crypto.Type" json:"type,omitempty"`
+	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *KeyPair256) Reset()         { *m = KeyPair256{} }
-func (m *KeyPair256) String() string { return proto.CompactTextString(m) }
-func (*KeyPair256) ProtoMessage()    {}
-
-func (m *KeyPair256) GetPublicKey() *PublicKey256 {
-	if m != nil {
-		return m.PublicKey
-	}
-	return nil
-}
+func (m *PrivateKey) Reset()         { *m = PrivateKey{} }
+func (m *PrivateKey) String() string { return proto.CompactTextString(m) }
+func (*PrivateKey) ProtoMessage()    {}
 
 // DO NOT modify its field directly, object of this class is treated as immutable
-type Signature256 struct {
-	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
+type Signature struct {
+	Type Type   `protobuf:"varint,1,opt,name=type,enum=crypto.Type" json:"type,omitempty"`
+	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *Signature256) Reset()         { *m = Signature256{} }
-func (m *Signature256) String() string { return proto.CompactTextString(m) }
-func (*Signature256) ProtoMessage()    {}
+func (m *Signature) Reset()         { *m = Signature{} }
+func (m *Signature) String() string { return proto.CompactTextString(m) }
+func (*Signature) ProtoMessage()    {}
 
 // DO NOT modify its field directly, object of this class is treated as immutable
 type Digest256 struct {
@@ -79,4 +93,8 @@ func (m *Digests256) GetDigests() []*Digest256 {
 		return m.Digests
 	}
 	return nil
+}
+
+func init() {
+	proto.RegisterEnum("crypto.Type", Type_name, Type_value)
 }
