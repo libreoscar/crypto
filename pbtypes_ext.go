@@ -35,17 +35,17 @@ func (key *PrivateKey) GetPublicKey() *PublicKey256 {
 	}
 }
 
-func (key *PrivateKey) Sign(digest *Digest256) (*Signature, error) {
+func (key *PrivateKey) Sign(digest *Digest256) *Signature {
 	if key.Type == Type_P256 {
 		ecPriv := p256NewEcPrivKey(key.Data)
 		r, s, err := ecdsa.Sign(rand.Reader, ecPriv, digest.Data)
 		if err == nil {
-			return p256ToSignature(ecPriv.X, ecPriv.Y, r, s), nil
+			return p256ToSignature(ecPriv.X, ecPriv.Y, r, s)
 		} else {
-			return nil, err
+			panic(err)
 		}
 	} else {
-		return nil, fmt.Errorf("Unsupported type: %s", key.Type)
+		panic(fmt.Errorf("Unsupported type: %s", key.Type))
 	}
 }
 

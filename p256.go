@@ -77,15 +77,15 @@ func p256ParseSignature(sig *Signature) (r, s, x, y *big.Int, err error) {
 	}
 }
 
-func p256GenEcPrivKey() (*ecdsa.PrivateKey, error) {
-	return ecdsa.GenerateKey(curveP256, rand.Reader)
+func p256GenEcPrivKey() *ecdsa.PrivateKey {
+	key, err := ecdsa.GenerateKey(curveP256, rand.Reader)
+	if err != nil {
+		panic(err)
+	}
+	return key
 }
 
-func P256GenPrivKey() (*PrivateKey, error) {
-	priv_key, err := p256GenEcPrivKey()
-	if err != nil {
-		return nil, err
-	} else {
-		return &PrivateKey{Type_P256, nonNegBigTo32Bytes(priv_key.D)}, nil
-	}
+func P256GenPrivKey() *PrivateKey {
+	priv_key := p256GenEcPrivKey()
+	return &PrivateKey{Type_P256, nonNegBigTo32Bytes(priv_key.D)}
 }
