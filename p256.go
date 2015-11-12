@@ -37,7 +37,7 @@ func p256IsOnCurve(x, y *big.Int) bool {
 	return curveP256.IsOnCurve(x, y)
 }
 
-// note: no validation
+// Note: no validation
 func p256NewEcPubKey(x, y *big.Int) *ecdsa.PublicKey {
 	pub := new(ecdsa.PublicKey)
 	pub.Curve = curveP256
@@ -48,10 +48,11 @@ func p256NewEcPubKey(x, y *big.Int) *ecdsa.PublicKey {
 
 // note: no validation
 func p256ToPubKey256(x, y *big.Int) *PublicKey256 {
-	buf := make([]byte, 0, 64)
-	buf = append(buf, nonNegBigTo32Bytes(x)...)
-	buf = append(buf, nonNegBigTo32Bytes(y)...)
-	return &PublicKey256{Hash256(buf).Data}
+	hasher := NewHasher256()
+	hasher.Feed([]byte(Type_P256.String()))
+	hasher.Feed(nonNegBigTo32Bytes(x))
+	hasher.Feed(nonNegBigTo32Bytes(y))
+	return &PublicKey256{hasher.Sum(nil).Data}
 }
 
 // note: no validation

@@ -42,7 +42,7 @@ func (x Type) String() string {
 	return proto.EnumName(Type_name, int32(x))
 }
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 type PublicKey256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
@@ -51,7 +51,7 @@ func (m *PublicKey256) Reset()         { *m = PublicKey256{} }
 func (m *PublicKey256) String() string { return proto.CompactTextString(m) }
 func (*PublicKey256) ProtoMessage()    {}
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 type PrivateKey struct {
 	Type Type   `protobuf:"varint,1,opt,name=type,enum=crypto.Type" json:"type,omitempty"`
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
@@ -61,7 +61,7 @@ func (m *PrivateKey) Reset()         { *m = PrivateKey{} }
 func (m *PrivateKey) String() string { return proto.CompactTextString(m) }
 func (*PrivateKey) ProtoMessage()    {}
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 type Signature struct {
 	Type Type   `protobuf:"varint,1,opt,name=type,enum=crypto.Type" json:"type,omitempty"`
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
@@ -71,7 +71,7 @@ func (m *Signature) Reset()         { *m = Signature{} }
 func (m *Signature) String() string { return proto.CompactTextString(m) }
 func (*Signature) ProtoMessage()    {}
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 type Digest256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }

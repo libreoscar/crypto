@@ -103,5 +103,5 @@ func NewDigest256(bytes []byte) (digest *Digest256, err error) {
 }
 
 func (digest *Digest256) DebugString() string {
-	return hex.EncodeToString(digest.Data[:2])
+	return hex.EncodeToString(digest.Data[:2]) + "..."
 }

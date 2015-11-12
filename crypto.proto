@@ -9,24 +9,24 @@ enum Type {
 	P256 = 1;
 }
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 message PublicKey256 {
   bytes data = 1;  // 256 bits long
 }
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 message PrivateKey {
   Type type = 1;
   bytes data = 2;  // for ecdsa, this is the random number k
 }
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 message Signature {
   Type type = 1;
   bytes data = 2;  // for ecdsa, this is <r, s, x, y> (for now). TODO: use a more compact form?
 }
 
-// DO NOT modify its field directly, object of this class is treated as immutable
+// DO NOT modify its field directly, object of this class is immutable
 message Digest256 {
   bytes data = 1;
 }
