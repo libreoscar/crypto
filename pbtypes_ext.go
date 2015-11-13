@@ -20,6 +20,18 @@ func (pubkey *PublicKey256) ToText() string {
 	return hex.EncodeToString(pubkey.Data)
 }
 
+func Text2PublicKey256(text string) (*PublicKey256, error) {
+	if len(text) != 256/8 {
+		return nil, fmt.Errorf("invalid input")
+	} else {
+		bytes, err := hex.DecodeString(text)
+		if err != nil {
+			return nil, err
+		}
+		return &PublicKey256{bytes}, nil
+	}
+}
+
 func (pubkey *PublicKey256) DebugString() string {
 	return pubkey.ToText()
 }
@@ -51,6 +63,29 @@ func (key *PrivateKey) Sign(digest *Digest256) *Signature {
 
 func (key *PrivateKey) DebugString() string {
 	return fmt.Sprintf("Type: %s, Data: %s", key.Type, hex.EncodeToString(key.Data[:8]))
+}
+
+func (key *PrivateKey) ToText() string {
+	data, err := proto.Marshal(key)
+	if err != nil {
+		panic(err)
+	}
+	return hex.EncodeToString(data)
+}
+
+func Text2PrivateKey(text string) (*PrivateKey, error) {
+	bytes, err := hex.DecodeString(text)
+	if err != nil {
+		return nil, err
+	}
+
+	privKey := &PrivateKey{}
+	err = proto.Unmarshal(bytes, privKey)
+	if err != nil {
+		return nil, err
+	} else {
+		return privKey, nil
+	}
 }
 
 //--------------------------- Signature256 --------------------------------------------------------
