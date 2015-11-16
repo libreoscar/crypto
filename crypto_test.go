@@ -31,3 +31,17 @@ func TestSignVerify(t *testing.T) {
 	sig3.Data[0] = sig3.Data[0] + 1
 	ensure.False(t, Verify(pub, digest, sig3))
 }
+
+func TestToTextAndTextTo(t *testing.T) {
+	key := P256GenPrivKey()
+	keyText := key.ToText()
+	key2, err := TextToPrivateKey(keyText)
+	ensure.Nil(t, err)
+	ensure.DeepEqual(t, key2, key)
+
+	pubkey := key.GetPublicKey()
+	pubkeyText := pubkey.ToText()
+	pubkey2, err := TextToPublicKey256(pubkeyText)
+	ensure.Nil(t, err)
+	ensure.DeepEqual(t, pubkey2, pubkey)
+}

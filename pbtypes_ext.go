@@ -8,6 +8,7 @@ import (
 	"crypto/rand"
 	"encoding/hex"
 	"fmt"
+	"github.com/golang/protobuf/proto"
 )
 
 //--------------------------- PublicKey256 --------------------------------------------------------
@@ -20,8 +21,8 @@ func (pubkey *PublicKey256) ToText() string {
 	return hex.EncodeToString(pubkey.Data)
 }
 
-func Text2PublicKey256(text string) (*PublicKey256, error) {
-	if len(text) != 256/8 {
+func TextToPublicKey256(text string) (*PublicKey256, error) {
+	if len(text) != 256/8*2 {
 		return nil, fmt.Errorf("invalid input")
 	} else {
 		bytes, err := hex.DecodeString(text)
@@ -73,7 +74,7 @@ func (key *PrivateKey) ToText() string {
 	return hex.EncodeToString(data)
 }
 
-func Text2PrivateKey(text string) (*PrivateKey, error) {
+func TextToPrivateKey(text string) (*PrivateKey, error) {
 	bytes, err := hex.DecodeString(text)
 	if err != nil {
 		return nil, err
