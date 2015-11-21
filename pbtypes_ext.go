@@ -89,13 +89,13 @@ func TextToPrivateKey(text string) (*PrivateKey, error) {
 	}
 }
 
-//--------------------------- Signature256 --------------------------------------------------------
+//--------------------------- Signature -----------------------------------------------------------
 
 func (s *Signature) DebugString() string {
 	return fmt.Sprintf("Type: %s, Data: %s", s.Type, hex.EncodeToString(s.Data[:8]))
 }
 
-//--------------------------- Digest256 --------------------------------------------------------
+//--------------------------- Digest256 -----------------------------------------------------------
 
 func (digest *Digest256) EqualTo(d *Digest256) bool {
 	return bytes.Equal(digest.Data, d.Data)

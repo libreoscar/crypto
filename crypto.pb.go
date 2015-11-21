@@ -18,9 +18,13 @@ It has these top-level messages:
 package crypto
 
 import proto "github.com/golang/protobuf/proto"
+import fmt "fmt"
+import math "math"
 
 // Reference imports to suppress errors if they are not otherwise used.
 var _ = proto.Marshal
+var _ = fmt.Errorf
+var _ = math.Inf
 
 type Type int32
 
@@ -41,15 +45,17 @@ var Type_value = map[string]int32{
 func (x Type) String() string {
 	return proto.EnumName(Type_name, int32(x))
 }
+func (Type) EnumDescriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 // DO NOT modify its field directly, object of this class is immutable
 type PublicKey256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *PublicKey256) Reset()         { *m = PublicKey256{} }
-func (m *PublicKey256) String() string { return proto.CompactTextString(m) }
-func (*PublicKey256) ProtoMessage()    {}
+func (m *PublicKey256) Reset()                    { *m = PublicKey256{} }
+func (m *PublicKey256) String() string            { return proto.CompactTextString(m) }
+func (*PublicKey256) ProtoMessage()               {}
+func (*PublicKey256) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{0} }
 
 // DO NOT modify its field directly, object of this class is immutable
 type PrivateKey struct {
@@ -57,36 +63,46 @@ type PrivateKey struct {
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *PrivateKey) Reset()         { *m = PrivateKey{} }
-func (m *PrivateKey) String() string { return proto.CompactTextString(m) }
-func (*PrivateKey) ProtoMessage()    {}
+func (m *PrivateKey) Reset()                    { *m = PrivateKey{} }
+func (m *PrivateKey) String() string            { return proto.CompactTextString(m) }
+func (*PrivateKey) ProtoMessage()               {}
+func (*PrivateKey) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{1} }
 
 // DO NOT modify its field directly, object of this class is immutable
+//
+// TODO: signature compression
+// Note for ECDSA compression:
+// 1. secp256k1 implementation: https://github.com/ethereum/go-ethereum/tree/develop/crypto/secp256k1
+// 2. <x, y> can be stored as <x, first_bit_of_y>
+// 3. if h == 1 (e.g. secp256k1), r == s. For more about how to recover <x, y> from <r, s>, read http://www.secg.org/sec1-v2.pdf, page 47-48
 type Signature struct {
 	Type Type   `protobuf:"varint,1,opt,name=type,enum=crypto.Type" json:"type,omitempty"`
 	Data []byte `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *Signature) Reset()         { *m = Signature{} }
-func (m *Signature) String() string { return proto.CompactTextString(m) }
-func (*Signature) ProtoMessage()    {}
+func (m *Signature) Reset()                    { *m = Signature{} }
+func (m *Signature) String() string            { return proto.CompactTextString(m) }
+func (*Signature) ProtoMessage()               {}
+func (*Signature) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{2} }
 
 // DO NOT modify its field directly, object of this class is immutable
 type Digest256 struct {
 	Data []byte `protobuf:"bytes,1,opt,name=data,proto3" json:"data,omitempty"`
 }
 
-func (m *Digest256) Reset()         { *m = Digest256{} }
-func (m *Digest256) String() string { return proto.CompactTextString(m) }
-func (*Digest256) ProtoMessage()    {}
+func (m *Digest256) Reset()                    { *m = Digest256{} }
+func (m *Digest256) String() string            { return proto.CompactTextString(m) }
+func (*Digest256) ProtoMessage()               {}
+func (*Digest256) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{3} }
 
 type Digests256 struct {
 	Digests []*Digest256 `protobuf:"bytes,1,rep,name=digests" json:"digests,omitempty"`
 }
 
-func (m *Digests256) Reset()         { *m = Digests256{} }
-func (m *Digests256) String() string { return proto.CompactTextString(m) }
-func (*Digests256) ProtoMessage()    {}
+func (m *Digests256) Reset()                    { *m = Digests256{} }
+func (m *Digests256) String() string            { return proto.CompactTextString(m) }
+func (*Digests256) ProtoMessage()               {}
+func (*Digests256) Descriptor() ([]byte, []int) { return fileDescriptor0, []int{4} }
 
 func (m *Digests256) GetDigests() []*Digest256 {
 	if m != nil {
@@ -96,5 +112,28 @@ func (m *Digests256) GetDigests() []*Digest256 {
 }
 
 func init() {
+	proto.RegisterType((*PublicKey256)(nil), "crypto.PublicKey256")
+	proto.RegisterType((*PrivateKey)(nil), "crypto.PrivateKey")
+	proto.RegisterType((*Signature)(nil), "crypto.Signature")
+	proto.RegisterType((*Digest256)(nil), "crypto.Digest256")
+	proto.RegisterType((*Digests256)(nil), "crypto.Digests256")
 	proto.RegisterEnum("crypto.Type", Type_name, Type_value)
+}
+
+var fileDescriptor0 = []byte{
+	// 215 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x09, 0x6e, 0x88, 0x02, 0xff, 0xe2, 0xd2, 0x4c, 0xcf, 0x2c, 0xc9,
+	0x28, 0x4d, 0xd2, 0x4b, 0xce, 0xcf, 0xd5, 0xcf, 0xc9, 0x4c, 0x2a, 0x4a, 0xcd, 0x2f, 0x4e, 0x4e,
+	0x2c, 0xd2, 0x4f, 0x2e, 0xaa, 0x2c, 0x28, 0xc9, 0x87, 0x52, 0x7a, 0x05, 0x45, 0xf9, 0x25, 0xf9,
+	0x42, 0x6c, 0x10, 0x9e, 0x92, 0x0c, 0x17, 0x4f, 0x40, 0x69, 0x52, 0x4e, 0x66, 0xb2, 0x77, 0x6a,
+	0xa5, 0x91, 0xa9, 0x99, 0x10, 0x0f, 0x17, 0x4b, 0x4a, 0x62, 0x49, 0xa2, 0x04, 0xa3, 0x02, 0xa3,
+	0x06, 0x8f, 0x92, 0x19, 0x17, 0x57, 0x40, 0x51, 0x66, 0x59, 0x62, 0x49, 0x2a, 0x50, 0x5a, 0x48,
+	0x8a, 0x8b, 0xa5, 0xa4, 0xb2, 0x20, 0x15, 0x2c, 0xc7, 0x67, 0xc4, 0xa3, 0x07, 0x35, 0x30, 0x04,
+	0x28, 0x06, 0xd7, 0xc7, 0x04, 0xd6, 0x67, 0xca, 0xc5, 0x19, 0x9c, 0x99, 0x9e, 0x97, 0x58, 0x52,
+	0x5a, 0x94, 0x4a, 0x82, 0x36, 0x49, 0x2e, 0x4e, 0x97, 0xcc, 0xf4, 0xd4, 0xe2, 0x12, 0x4c, 0x97,
+	0x18, 0x70, 0x71, 0x41, 0xa4, 0x8a, 0x41, 0x72, 0x4a, 0x5c, 0xec, 0x29, 0x10, 0x1e, 0x50, 0x9a,
+	0x59, 0x83, 0xdb, 0x48, 0x10, 0x66, 0x2a, 0x5c, 0xbf, 0x96, 0x2c, 0x17, 0x0b, 0xd8, 0x0a, 0x6e,
+	0x2e, 0xf6, 0x50, 0x3f, 0x6f, 0x3f, 0xff, 0x70, 0x3f, 0x01, 0x06, 0x21, 0x0e, 0x2e, 0x96, 0x00,
+	0xa0, 0xa4, 0x00, 0x63, 0x12, 0x1b, 0x38, 0x1c, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xeb,
+	0xae, 0x7e, 0xd8, 0x34, 0x01, 0x00, 0x00,
 }

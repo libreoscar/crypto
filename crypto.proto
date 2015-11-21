@@ -21,9 +21,15 @@ message PrivateKey {
 }
 
 // DO NOT modify its field directly, object of this class is immutable
+//
+// TODO: signature compression
+// Note for ECDSA compression:
+// 1. secp256k1 implementation: https://github.com/ethereum/go-ethereum/tree/develop/crypto/secp256k1
+// 2. <x, y> can be stored as <x, first_bit_of_y>
+// 3. if h == 1 (e.g. secp256k1), r == s. For more about how to recover <x, y> from <r, s>, read http://www.secg.org/sec1-v2.pdf, page 47-48
 message Signature {
   Type type = 1;
-  bytes data = 2;  // for ecdsa, this is <r, s, x, y> (for now). TODO: use a more compact form?
+  bytes data = 2;  // for ecdsa, this is <r, s, x, y> (for now).
 }
 
 // DO NOT modify its field directly, object of this class is immutable
