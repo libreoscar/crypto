@@ -91,6 +91,16 @@ func TextToPrivateKey(text string) (*PrivateKey, error) {
 
 //--------------------------- Signature -----------------------------------------------------------
 
+func NewP256Signature(bytes []byte) (*Signature, error) {
+	sig := &Signature{Type: Type_P256, Data: bytes}
+	_, _, _, _, err := p256ParseSignature(sig)
+	if err != nil {
+		return nil, err
+	} else {
+		return sig, nil
+	}
+}
+
 func (s *Signature) DebugString() string {
 	return fmt.Sprintf("Type: %s, Data: %s", s.Type, hex.EncodeToString(s.Data[:8]))
 }
